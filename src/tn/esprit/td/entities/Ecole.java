@@ -1,5 +1,7 @@
 package tn.esprit.td.entities;
 
+import tn.esprit.td.exceptions.EtudiandExisteException;
+
 import java.util.Arrays;
 
 public class Ecole {
@@ -28,8 +30,9 @@ public class Ecole {
         return -1;
     }
 
-    public void ajouterEtudiant(Etudiant e){
+    public void ajouterEtudiant(Etudiant e) throws EtudiandExisteException {
         if(rechercherEtudiant(e)==-1){
+
             if (nbrEtudiants<etudiants.length){
                 etudiants[nbrEtudiants]=e;
                 nbrEtudiants++;
@@ -38,7 +41,7 @@ public class Ecole {
                 System.out.println("l'ecole est plein");
             }
         }else{
-            System.out.println("Ce étudiant est déja inscri");
+            throw new EtudiandExisteException("Etudiant existe deja dans l'ecole .");
         }
     }
     public float getMoyenneDes3a(){
@@ -69,7 +72,7 @@ public class Ecole {
 
     }
 
-    public void changerEcole(Etudiant etd,Ecole e){
+    public void changerEcole(Etudiant etd,Ecole e) {
         int etudiantInd = rechercherEtudiant(etd);
 
         if (etudiantInd != -1) {
@@ -79,7 +82,13 @@ public class Ecole {
             }
             nbrEtudiants--;
 
+
+            try {
                 e.ajouterEtudiant(etd);
+            }catch (EtudiandExisteException exp){
+                System.out.println(exp.getMessage());
+            }
+
                 e.etudiants[nbrEtudiants] = etd;
                 e.nbrEtudiants++;
                 System.out.println("etudiant a bien changé d'école.");
